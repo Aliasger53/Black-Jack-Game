@@ -21,6 +21,7 @@ body {
     height: 50px;
     font-size: 20px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 #stay {
@@ -28,6 +29,7 @@ body {
     height: 50px;
     font-size: 20px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 #restartGame {
@@ -35,4 +37,5 @@ body {
     height: 50px;
     font-size: 20px;
     border-radius: 10px;
+    cursor: pointer;
 }
