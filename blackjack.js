@@ -98,7 +98,7 @@ function startGame() {
   // Getting window Items
   hiddenCard = document.getElementById("hidden");
   document.getElementById("hit").addEventListener("click", hit);
-  document.getElementById("show").addEventListener("click", show);
+  document.getElementById("Stay").addEventListener("click", Stay);
   document.getElementById("restartGame").addEventListener("click", restartGame);
 }
 
@@ -125,7 +125,7 @@ function hit() {
   }
 }
 
-function show() {
+function Stay() {
   if (useVar.count > 0) {
     msg();
   } else {
