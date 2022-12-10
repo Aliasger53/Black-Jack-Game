@@ -1,1 +1,237 @@
-useVar={};let delearSum=0,add=0,hiddenCard,firstCard,firstCardDetails,card;function resettingVaraibales(){let e=deckCreaction();return useVar={shuffleDeck:e,aceCount:0,yourSum:0,count:0}}function deckCreaction(){let e=["H","C","S","D"],a=["A",2,3,4,5,6,7,8,9,10,"J","Q","K"],t=[],r,d;for(i=0;i<e.length;i++)for(j=0;j<a.length;j++)t.push(a[j]+"-"+e[i]);for(i=t.length-1;i>0;i--)r=Math.floor(Math.random()*(i+1)),d=t[i],t[i]=t[r],t[r]=d;return t}function startGame(){let e=document.createElement("img");for(e.src="./cards/BACK.png",e.id="hidden",e.alt="Flipped-Card",document.getElementById("dealer-cards").append(e),firstCardDetails=cardType(firstCard=useVar.shuffleDeck.shift()),delearSum=cardValues(firstCard);delearSum<17;)(delearSum+=add=cardValues(card=cardDisplay("dealer-cards")))>21&&(delearSum-=10*useVar.aceCount,useVar.aceCount=0);for(i=0,useVar.aceCount=0,add=0;i<2;i++)add=cardValues(card=cardDisplay("your-cards")),useVar.yourSum+=add;hiddenCard=document.getElementById("hidden"),document.getElementById("hit").addEventListener("click",hit),document.getElementById("stay").addEventListener("click",stay),document.getElementById("restartGame").addEventListener("click",restartGame)}function hit(){useVar.count>0?msg():useVar.yourSum<=21&&(add=cardValues(card=cardDisplay("your-cards")),useVar.yourSum+=add),useVar.yourSum>21&&useVar.aceCount>0?(useVar.yourSum=useVar.yourSum-10*useVar.aceCount,useVar.aceCount=0):useVar.yourSum>21&&(result(),hiddenCard.src="./cards/"+firstCard+".png",hiddenCard.alt=firstCardDetails[0]+"-of-"+firstCardDetails[1]+"-img")}function stay(){useVar.count>0?msg():(result(),hiddenCard.src="./cards/"+firstCard+".png",hiddenCard.alt=firstCardDetails[0]+"-of-"+firstCardDetails[1]+"-img")}function cardValues(e){let a,t=0;return"A"==(a=e.split("-"))[0]?(useVar.aceCount++,t=11):t=isNaN(a[0])?10:parseInt(a[0]),t}function cardDisplay(e){let a;a=cardType(card=useVar.shuffleDeck.shift());let t=document.createElement("img");return t.src="./cards/"+card+".png",t.alt=a[0]+"-of-"+a[1]+"-img",document.getElementById(e).append(t),card}function result(){document.getElementById("dealer-sum").innerHTML=delearSum,document.getElementById("your-sum").innerHTML=useVar.yourSum,useVar.yourSum>21?(document.getElementById("results").innerHTML="You lost the game",useVar.count=1):delearSum==useVar.yourSum?(document.getElementById("results").innerHTML="Its a draw",useVar.count=2):useVar.yourSum>delearSum||delearSum>21?(document.getElementById("results").innerHTML="You win the game",useVar.count=3):(document.getElementById("results").innerHTML="You lost the game",useVar.count=1)}function msg(){1==useVar.count?(alert("You already lost the game, please play agian"),restartGame()):2==useVar.count?(alert("The game was a draw, please play agian"),restartGame()):3==useVar.count&&(alert("You already won the game, please play agian"),restartGame())}function restartGame(){resettingVaraibales(),document.getElementById("dealer-cards").innerHTML="",document.getElementById("your-cards").innerHTML="",document.getElementById("dealer-sum").innerHTML="",document.getElementById("your-sum").innerHTML="",document.getElementById("results").innerHTML="",startGame()}function cardType(e){let a,t;for(k=0,cardSpliter=e.split("-");k<4;k++)"H"==cardSpliter[1]?(a="Hearts",t=cardSpliter[0]):"C"==cardSpliter[1]?(a="Clubs",t=cardSpliter[0]):"S"==cardSpliter[1]?(a="Spades",t=cardSpliter[0]):(a="Diamonds",t=cardSpliter[0]);return[t,a]}window.onload=function(){resettingVaraibales(),startGame()};
+useVar = {}; // Used to store resetting variables after game ends
+
+// Score Calculation Variables
+let delearSum = 0;
+let add = 0;
+
+// Cards variables
+let hiddenCard = undefined;
+let firstCard = undefined;
+let firstCardDetails = undefined;
+let card = undefined;
+
+// Loading functions on load of website
+window.onload = function () {
+  resettingVaraibales();
+  startGame();
+};
+
+// Function for creating and resetting variables to there orignal values
+function resettingVaraibales() {
+  let shuffleDeck = deckCreaction(); // Deck Creation Variables
+  let aceCount = 0;
+  let yourSum = 0; // To store user score
+  let count = 0; // Result output variable
+  return (useVar = { shuffleDeck, aceCount, yourSum, count });
+}
+
+// Deck creation and shuffelling function
+function deckCreaction() {
+  let types = ["H", "C", "S", "D"];
+  let values = ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"];
+  let deck = [];
+  let newPosition;
+  let tempCardStore;
+
+  // Creating a deck of cards
+  for (i = 0; i < types.length; i++) {
+    for (j = 0; j < values.length; j++) {
+      deck.push(values[j] + "-" + types[i]);
+    }
+  }
+
+  // Shuffling the deck of cards
+  for (i = deck.length - 1; i > 0; i--) {
+    newPosition = Math.floor(Math.random() * (i + 1));
+    tempCardStore = deck[i];
+    deck[i] = deck[newPosition];
+    deck[newPosition] = tempCardStore;
+  }
+  return deck;
+}
+
+// Starting the game
+function startGame() {
+  // Creating first display back card
+  let backImg = document.createElement("img");
+  backImg.src = "./cards/BACK.png";
+  backImg.id = "hidden";
+  backImg.alt = "Flipped-Card";
+  document.getElementById("dealer-cards").append(backImg);
+
+  // Providing the first card of deck to dealer witch shall be hidden and storing it sapretly so it can be used latter
+  firstCard = useVar.shuffleDeck.shift();
+  firstCardDetails = cardType(firstCard);
+
+  // Storing the value of first card in Dealers Score
+  delearSum = cardValues(firstCard);
+
+  // Giving delear more cards on condition
+  for (delearSum; delearSum < 17; ) {
+    card = cardDisplay("dealer-cards");
+
+    // Getting the value of card
+    add = cardValues(card);
+
+    // Adding the valur of card to dealerSum
+    delearSum += add;
+
+    // Checking if delears total acceeds 21 limit and if there is ace present then reducing the ace value to 1 and altering dealerSum accordinly
+    if (delearSum > 21) {
+      delearSum = delearSum - useVar.aceCount * 10;
+      useVar.aceCount = 0;
+    }
+  }
+
+  //Setting aceCount to 0 so it can futher be ussed for user
+  useVar.aceCount = 0;
+  add = 0;
+
+  // Providing user first two cards
+  for (i = 0; i < 2; i++) {
+    card = cardDisplay("your-cards");
+
+    // Getting value of cards
+    add = cardValues(card);
+
+    // Adding card Value to youSum and if ace card and incrementing the ace count
+    useVar.yourSum += add;
+  }
+
+  // Getting window Items
+  hiddenCard = document.getElementById("hidden");
+  document.getElementById("hit").addEventListener("click", hit);
+  document.getElementById("stay").addEventListener("click", stay);
+  document.getElementById("restartGame").addEventListener("click", restartGame);
+}
+
+function hit() {
+  if (useVar.count > 0) {
+    msg();
+  } else if (useVar.yourSum <= 21) {
+    card = cardDisplay("your-cards");
+
+    // Getting value of cards
+    add = cardValues(card);
+
+    // Adding card Value to youSum
+    useVar.yourSum += add;
+  }
+
+  //checking for acecount and if available then reducing it and if not then displaying the result it self
+  if (useVar.yourSum > 21 && useVar.aceCount > 0) {
+    useVar.yourSum = useVar.yourSum - useVar.aceCount * 10;
+    useVar.aceCount = 0;
+  } else if (useVar.yourSum > 21) {
+    result();
+    hiddenCard.src = "./cards/" + firstCard + ".png";
+    hiddenCard.alt =
+      firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
+  }
+}
+
+function stay() {
+  if (useVar.count > 0) {
+    msg();
+  } else {
+    result();
+    hiddenCard.src = "./cards/" + firstCard + ".png";
+    hiddenCard.alt =
+      firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
+  }
+}
+
+// For getting card value
+function cardValues(cardForSplit) {
+  let cardSplit;
+  let sum = 0;
+  cardSplit = cardForSplit.split("-");
+  if (cardSplit[0] == "A") {
+    useVar.aceCount++;
+    sum = 11;
+  } else if (isNaN(cardSplit[0])) {
+    sum = 10;
+  } else {
+    sum = parseInt(cardSplit[0]);
+  }
+  return sum;
+}
+
+//For sending the card image to Window
+function cardDisplay(user) {
+  let cardDetails = undefined;
+  card = useVar.shuffleDeck.shift();
+  cardDetails = cardType(card);
+  let cardImg = document.createElement("img");
+  cardImg.src = "./cards/" + card + ".png";
+  cardImg.alt = cardDetails[0] + "-of-" + cardDetails[1] + "-img";
+  document.getElementById(user).append(cardImg);
+  return card;
+}
+
+// Result update function
+function result() {
+  document.getElementById("dealer-sum").innerHTML = delearSum;
+  document.getElementById("your-sum").innerHTML = useVar.yourSum;
+  if (useVar.yourSum > 21) {
+    document.getElementById("results").innerHTML = "You lost the game";
+    useVar.count = 1;
+  } else if (delearSum == useVar.yourSum) {
+    document.getElementById("results").innerHTML = "Its a draw";
+    useVar.count = 2;
+  } else if (useVar.yourSum > delearSum || delearSum > 21) {
+    document.getElementById("results").innerHTML = "You win the game";
+    useVar.count = 3;
+  } else {
+    document.getElementById("results").innerHTML = "You lost the game";
+    useVar.count = 1;
+  }
+}
+
+function msg() {
+  if (useVar.count == 1) {
+    alert("You already lost the game, please play agian");
+    restartGame();
+  } else if (useVar.count == 2) {
+    alert("The game was a draw, please play agian");
+    restartGame();
+  } else if (useVar.count == 3) {
+    alert("You already won the game, please play agian");
+    restartGame();
+  }
+}
+
+function restartGame() {
+  resettingVaraibales(); // Reseting required the variables
+
+  // Resting all the HTML Elments
+  document.getElementById("dealer-cards").innerHTML = "";
+  document.getElementById("your-cards").innerHTML = "";
+  document.getElementById("dealer-sum").innerHTML = "";
+  document.getElementById("your-sum").innerHTML = "";
+  document.getElementById("results").innerHTML = "";
+
+  startGame(); // Calling for start Game function to provide cards again
+}
+
+function cardType(cardForDetails) {
+  let typeofCard;
+  let cardNumer;
+  cardSpliter = cardForDetails.split("-");
+  for (k = 0; k < 4; k++) {
+    if (cardSpliter[1] == "H") {
+      typeofCard = "Hearts";
+      cardNumer = cardSpliter[0];
+    } else if (cardSpliter[1] == "C") {
+      typeofCard = "Clubs";
+      cardNumer = cardSpliter[0];
+    } else if (cardSpliter[1] == "S") {
+      typeofCard = "Spades";
+      cardNumer = cardSpliter[0];
+    } else {
+      typeofCard = "Diamonds";
+      cardNumer = cardSpliter[0];
+    }
+  }
+  return [cardNumer, typeofCard];
+}
