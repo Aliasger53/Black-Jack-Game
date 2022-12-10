@@ -7,6 +7,7 @@ let add = 0;
 // Cards variables
 let hiddenCard = undefined;
 let firstCard = undefined;
+let firstCardDetails = undefined;
 let card = undefined;
 
 // Loading functions on load of website
@@ -55,10 +56,12 @@ function startGame() {
   let backImg = document.createElement("img");
   backImg.src = "./cards/BACK.png";
   backImg.id = "hidden";
+  backImg.alt = "Flipped-Card";
   document.getElementById("dealer-cards").append(backImg);
 
   // Providing the first card of deck to dealer witch shall be hidden and storing it sapretly so it can be used latter
   firstCard = useVar.shuffleDeck.shift();
+  firstCardDetails = cardType(firstCard);
 
   // Storing the value of first card in Dealers Score
   delearSum = cardValues(firstCard);
@@ -122,6 +125,8 @@ function hit() {
   } else if (useVar.yourSum > 21) {
     result();
     hiddenCard.src = "./cards/" + firstCard + ".png";
+    hiddenCard.alt =
+      firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
   }
 }
 
@@ -131,6 +136,8 @@ function stay() {
   } else {
     result();
     hiddenCard.src = "./cards/" + firstCard + ".png";
+    hiddenCard.alt =
+      firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
   }
 }
 
@@ -152,9 +159,12 @@ function cardValues(cardForSplit) {
 
 //For sending the card image to Window
 function cardDisplay(user) {
+  let cardDetails = undefined;
   card = useVar.shuffleDeck.shift();
+  cardDetails = cardType(card);
   let cardImg = document.createElement("img");
   cardImg.src = "./cards/" + card + ".png";
+  cardImg.alt = cardDetails[0] + "-of-" + cardDetails[1] + "-img";
   document.getElementById(user).append(cardImg);
   return card;
 }
@@ -202,4 +212,26 @@ function restartGame() {
   document.getElementById("results").innerHTML = "";
 
   startGame(); // Calling for start Game function to provide cards again
+}
+
+function cardType(cardForDetails) {
+  let typeofCard;
+  let cardNumer;
+  cardSpliter = cardForDetails.split("-");
+  for (k = 0; k < 4; k++) {
+    if (cardSpliter[1] == "H") {
+      typeofCard = "Hearts";
+      cardNumer = cardSpliter[0];
+    } else if (cardSpliter[1] == "C") {
+      typeofCard = "Clubs";
+      cardNumer = cardSpliter[0];
+    } else if (cardSpliter[1] == "S") {
+      typeofCard = "Spades";
+      cardNumer = cardSpliter[0];
+    } else {
+      typeofCard = "Diamonds";
+      cardNumer = cardSpliter[0];
+    }
+  }
+  return [cardNumer, typeofCard];
 }
