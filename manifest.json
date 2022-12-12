@@ -1,0 +1,20 @@
+{
+    "name" : "Black Jack Game",
+    "short_name": "Black Jack",
+    "start_url":".",
+    "background_color":"#356565",
+    "theme_color":"#35654d",
+    "display":"standalone",
+    "icons":[
+        {
+        "src":"card/logo192.png",
+        "sizes":"192x192",
+        "type":"image/png"
+        },
+        {
+        "src":"card/logo.png",
+        "sizes":"512x512",
+        "type":"image/png"
+        }
+    ]
+}
