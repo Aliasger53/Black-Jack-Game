@@ -7,12 +7,12 @@
     "display":"standalone",
     "icons":[
         {
-        "src":"card/logo192.png",
+        "src":"cards/logo192.png",
         "sizes":"192x192",
         "type":"image/png"
         },
         {
-        "src":"card/logo.png",
+        "src":"cards/logo.png",
         "sizes":"512x512",
         "type":"image/png"
         }
