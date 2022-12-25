@@ -54,7 +54,7 @@ function deckCreaction() {
 function startGame() {
   // Creating first display back card
   let backImg = document.createElement("img");
-  backImg.src = "./cards/BACK.png";
+  backImg.src = "./cards/BACK.avif";
   backImg.id = "hidden";
   backImg.alt = "Flipped-Card";
   document.getElementById("dealer-cards").append(backImg);
@@ -124,7 +124,7 @@ function hit() {
     useVar.aceCount = 0;
   } else if (useVar.yourSum > 21) {
     result();
-    hiddenCard.src = "./cards/" + firstCard + ".png";
+    hiddenCard.src = "./cards/" + firstCard + ".avif";
     hiddenCard.alt =
       firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
   }
@@ -135,7 +135,7 @@ function stay() {
     msg();
   } else {
     result();
-    hiddenCard.src = "./cards/" + firstCard + ".png";
+    hiddenCard.src = "./cards/" + firstCard + ".avif";
     hiddenCard.alt =
       firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
   }
@@ -163,7 +163,7 @@ function cardDisplay(user) {
   card = useVar.shuffleDeck.shift();
   cardDetails = cardType(card);
   let cardImg = document.createElement("img");
-  cardImg.src = "./cards/" + card + ".png";
+  cardImg.src = "./cards/" + card + ".avif";
   cardImg.alt = cardDetails[0] + "-of-" + cardDetails[1] + "-img";
   document.getElementById(user).append(cardImg);
   return card;
