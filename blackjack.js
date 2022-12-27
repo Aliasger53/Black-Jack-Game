@@ -1,5 +1,6 @@
 useVar = {}; // Used to store resetting variables after game ends
-
+// let data = undefined;
+// let dataUrl = undefined;
 // Score Calculation Variables
 let delearSum = 0;
 let add = 0;
@@ -11,9 +12,11 @@ let firstCardDetails = undefined;
 let card = undefined;
 
 // Loading functions on load of website
-window.onload = function () {
+window.onload = async function () {
   resettingVaraibales();
+  storingImgs();
   startGame();
+  // setTimeout(startGame, 900);
 };
 
 // Function for creating and resetting variables to there orignal values
@@ -23,6 +26,36 @@ function resettingVaraibales() {
   let yourSum = 0; // To store user score
   let count = 0; // Result output variable
   return (useVar = { shuffleDeck, aceCount, yourSum, count });
+}
+
+function storingImgs() {
+  for (i = 0; i < useVar.shuffleDeck.length; i++) {
+    let sessionKey = useVar.shuffleDeck[i];
+    imagePath = "./cards/" + sessionKey + ".avif";
+    toDataURL(imagePath, async function (dataURL) {
+      sessionStorage.setItem(sessionKey, dataURL);
+    });
+  }
+
+  imagePath = "./cards/back.avif";
+  toDataURL(imagePath, async function (dataURL) {
+    sessionStorage.setItem("back-img", dataURL);
+  });
+}
+
+function toDataURL(src, callback) {
+  let image = new Image();
+  image.crossOrigin = "Anonymous";
+  image.onload = function () {
+    let canvas = document.createElement("canvas");
+    let context = canvas.getContext("2d");
+    canvas.height = this.naturalHeight;
+    canvas.width = this.naturalWidth;
+    context.drawImage(this, 0, 0);
+    let dataURL = canvas.toDataURL("image/jpeg");
+    callback(dataURL);
+  };
+  image.src = src;
 }
 
 // Deck creation and shuffelling function
@@ -54,7 +87,7 @@ function deckCreaction() {
 function startGame() {
   // Creating first display back card
   let backImg = document.createElement("img");
-  backImg.src = "./cards/BACK.avif";
+  backImg.src = sessionStorage.getItem("back-img");
   backImg.id = "hidden";
   backImg.alt = "Flipped-Card";
   document.getElementById("dealer-cards").append(backImg);
@@ -124,7 +157,7 @@ function hit() {
     useVar.aceCount = 0;
   } else if (useVar.yourSum > 21) {
     result();
-    hiddenCard.src = "./cards/" + firstCard + ".avif";
+    hiddenCard.src = sessionStorage.getItem(firstCard);
     hiddenCard.alt =
       firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
   }
@@ -135,7 +168,7 @@ function stay() {
     msg();
   } else {
     result();
-    hiddenCard.src = "./cards/" + firstCard + ".avif";
+    hiddenCard.src = sessionStorage.getItem(firstCard);
     hiddenCard.alt =
       firstCardDetails[0] + "-of-" + firstCardDetails[1] + "-img";
   }
@@ -163,7 +196,7 @@ function cardDisplay(user) {
   card = useVar.shuffleDeck.shift();
   cardDetails = cardType(card);
   let cardImg = document.createElement("img");
-  cardImg.src = "./cards/" + card + ".avif";
+  cardImg.src = sessionStorage.getItem(card);
   cardImg.alt = cardDetails[0] + "-of-" + cardDetails[1] + "-img";
   document.getElementById(user).append(cardImg);
   return card;
