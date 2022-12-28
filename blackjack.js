@@ -12,10 +12,13 @@ let firstCardDetails = undefined;
 let card = undefined;
 
 // Loading functions on load of website
-window.onload = async function () {
+window.onload = function () {
   resettingVaraibales();
-  storingImgs();
-  startGame();
+  if (sessionStorage.length > 1) {
+    startGame();
+  } else {
+    storingImgs(startGame);
+  }
   // setTimeout(startGame, 900);
 };
 
@@ -28,19 +31,19 @@ function resettingVaraibales() {
   return (useVar = { shuffleDeck, aceCount, yourSum, count });
 }
 
-function storingImgs() {
+function storingImgs(callback) {
   for (i = 0; i < useVar.shuffleDeck.length; i++) {
     let sessionKey = useVar.shuffleDeck[i];
     imagePath = "./cards/" + sessionKey + ".avif";
-    toDataURL(imagePath, async function (dataURL) {
+    toDataURL(imagePath, function (dataURL) {
       sessionStorage.setItem(sessionKey, dataURL);
     });
   }
-
   imagePath = "./cards/back.avif";
-  toDataURL(imagePath, async function (dataURL) {
+  toDataURL(imagePath, function (dataURL) {
     sessionStorage.setItem("back-img", dataURL);
   });
+  setTimeout(callback, 2000);
 }
 
 function toDataURL(src, callback) {
