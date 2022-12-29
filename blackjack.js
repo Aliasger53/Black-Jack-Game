@@ -17,7 +17,7 @@ window.onload = function () {
   if (sessionStorage.length > 1) {
     startGame();
   } else {
-    storingImgs(startGame);
+    storingImgs();
   }
   // setTimeout(startGame, 900);
 };
@@ -31,19 +31,22 @@ function resettingVaraibales() {
   return (useVar = { shuffleDeck, aceCount, yourSum, count });
 }
 
-function storingImgs(callback) {
+function storingImgs() {
+  // checkForComplition = false;
   for (i = 0; i < useVar.shuffleDeck.length; i++) {
     let sessionKey = useVar.shuffleDeck[i];
     imagePath = "./cards/" + sessionKey + ".avif";
     toDataURL(imagePath, function (dataURL) {
       sessionStorage.setItem(sessionKey, dataURL);
     });
+    if (i == 0) {
+      backImagePath = "./cards/BACK.avif";
+      toDataURL(backImagePath, function (dataURL) {
+        sessionStorage.setItem("back-img", dataURL);
+      });
+    }
   }
-  imagePath = "./cards/back.avif";
-  toDataURL(imagePath, function (dataURL) {
-    sessionStorage.setItem("back-img", dataURL);
-  });
-  setTimeout(callback, 2000);
+  setTimeout(startGame, 800);
 }
 
 function toDataURL(src, callback) {
