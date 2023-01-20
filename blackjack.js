@@ -46,7 +46,23 @@ function storingImgs() {
       });
     }
   }
-  setTimeout(startGame, 800);
+  setTimeout(startGame, 1000);
+
+  // for (p = 0; p < 1; ) {
+  //   console.log("inside for loop");
+  //   if (sessionStorage.length > 51) {
+  //     console.log("inside if statement");
+  //     startGame();
+  //     p++;
+  //   } else {
+  //     console.log("inside else");
+  //     setTimeout(1000);
+  //   }
+  // }
+
+  // if (sessionStorage.length > 52) {
+  //   startGame();
+  // }
 }
 
 function toDataURL(src, callback) {
@@ -91,9 +107,10 @@ function deckCreaction() {
 
 // Starting the game
 function startGame() {
+  backCard = "back-img";
   // Creating first display back card
   let backImg = document.createElement("img");
-  backImg.src = sessionStorage.getItem("back-img");
+  backImg.src = sessionStorage.getItem(backCard);
   backImg.id = "hidden";
   backImg.alt = "Flipped-Card";
   document.getElementById("dealer-cards").append(backImg);
